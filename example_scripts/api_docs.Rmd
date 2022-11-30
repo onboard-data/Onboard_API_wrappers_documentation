@@ -1,0 +1,80 @@
+---
+title: "API_docs"
+output: html_document
+date: "2022-11-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+get_equip_types <- function(){
+  
+  equiptype <- api.get('equiptype')
+  
+  subtypes <- sapply(equiptype$sub_types, as.data.frame)
+  subtypes <- data.table::rbindlist(subtypes)
+  
+  equip_types <- equiptype %>%
+    filter(.data$active == T) %>%
+    select(-c(.data$sub_types, .data$critical_point_types, .data$flow_order, .data$active)) %>%
+    left_join(subtypes,by = c('id' = 'equipment_type_id'),
+              suffix = c('','_subtype'))
+  
+  return(equip_types)
+}
+```
+
+
+```{r}
+equiptype <- api.get('equiptype')
+equiptype
+```
+```{r}
+
+equiptype %>% 
+  rename(subtype = sub_types) %>% 
+  unnest(subtype, names_sep = "_")
+
+```
+
+```{r}
+equiptype2 <- get_equip_types()
+equiptype2
+```
+
+
+```{r}
+library(OnboardClient)
+library(tidyverse)
+
+api.setup()
+
+equip_type <- get_equip_types() 
+equip_type %>% names()
+```
+
+
+```{python}
+   # >>> 
+sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
+   #    id  equipment_type_id         tag_name          name_long name_abbr
+   # 0  12                 26       exhaustFan        Exhaust Fan       EFN
+   # 1  13                 26        reliefFan         Relief Fan      RlFN
+   # 2  14                 26        returnFan         Return Fan       RFN
+   # 3  15                 26        supplyFan         Supply Fan       SFN
+   # ...
+   
+sub_type
+```
+
+
+```{r}
+equip_type %>% 
+  filter(tag_name == "fan") 
+# %>%
+#   select(sub_types)
+
+```
+
