@@ -4,7 +4,7 @@ Source for the readthedocs page for the Onboard Python API client documentation
 
 If you're trying to develop locally and want to test changes, use `sphinx-build` at terminal to build the local html files so you can see what your changes look like, like so: 
 
-```
+```shell
 	$ # from Onboard_API_wrappers_documentation directory
 
 	$ # sphinx-build [sourcedir] [outputdir]
