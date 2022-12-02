@@ -5,7 +5,17 @@ Columns for Data Model
 
 Equipment types
 ---------------
-Accessed with :code:`pd.json_normalize(client.get_equipment_types())`
+Accessed with 
+
+.. tabs::
+  .. code-tab:: py
+    
+    pd.json_normalize(client.get_equipment_types())
+
+  .. code-tab:: r R
+
+    get_equipment_types()
+
 
 **id**: unique integer associated with the given type/tag
 
@@ -26,7 +36,16 @@ Accessed with :code:`pd.json_normalize(client.get_equipment_types())`
 
 Sub-equipment types
 -------------------
-Accessed for given equipment (e.g. 'fan') with :code:`sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())`
+Accessed for given equipment (e.g. 'fan') with 
+
+.. tabs::
+  .. code-tab:: py
+    
+    sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
+
+  .. code-tab:: r R
+
+    get_equipment_types()
 
 **id**: unique integer associated with the given type/tag
 
@@ -39,9 +58,20 @@ Accessed for given equipment (e.g. 'fan') with :code:`sub_type = pd.DataFrame(eq
 **name_abbr**: common abbreviated form
 
 
+.. _point types:
+
 Point types
 -----------
-Accessed with :code:`client.get_all_point_types()`
+Accessed with 
+
+.. tabs::
+  .. code-tab:: py
+  
+    client.get_all_point_types()
+
+  .. code-tab:: r R
+
+    get_point_types()
 
 **id**: unique integer associated with the given type/tag
 
@@ -49,14 +79,26 @@ Accessed with :code:`client.get_all_point_types()`
 
 **active**: True if this class in the latest version of the ontology
 
-**measurement_id**: id of the associated measurement type in :code:`client.get_all_measurements()`
+**measurement_id**: id of the associated measurement type accessed as documented below
 
 **tags**:  Haystack tags associated with point type
 
 
+.. _unit types:
+
 Unit types
 ----------
-Accessed with :code:`pd.DataFrame(client.get_all_units())`
+Accessed with 
+
+.. tabs::
+  .. code-tab:: py
+    
+    pd.DataFrame(client.get_all_units())
+
+  .. code-tab:: r R
+
+    api.get('unit') # official
+    get_all_units() # dev
 
 **id**: unique integer associated with the given type/tag
 
@@ -74,10 +116,21 @@ Accessed with :code:`pd.DataFrame(client.get_all_units())`
 
 **unit_type**: url for additional information about measurement type (e.g. 'Temperature') on qudt.org
 
+.. _measurement types:
 
 Measurement types
 -----------------
-Accessed with :code:`pd.DataFrame(client.get_all_measurements())`
+Accessed with
+
+.. tabs::
+  .. code-tab:: py
+
+    pd.DataFrame(client.get_all_measurements())
+
+  .. code-tab:: r R
+
+    api.get('measurements') # official
+    get_all_measurements    # dev
 
 **id**: unique integer associated with the given measurement types
 
@@ -94,7 +147,19 @@ Accessed with :code:`pd.DataFrame(client.get_all_measurements())`
 
 Tag metadata
 ------------
-Accessed with :code:`pd.DataFrame(client.get_tags())`
+Accessed with 
+
+
+.. tabs::
+  .. code-tab:: py
+
+    pd.DataFrame(client.get_tags())
+  
+  .. code-tab:: r R
+
+    api.get('tags') # official
+    get_tags()      # dev
+  
 
 **id**: unique integer associated with the given tag metadata
 
@@ -185,15 +250,15 @@ Building-Specific Points
 
 **units**: Matches to unit abbreviation in units table
 
-**raw_unit_id**: unit id as it appears in :code:`client.get_all_units()`
+**raw_unit_id**: unit id as it appears when accessing :ref:`unit types<unit types>`
 
 **value**: Most recent reported value for point (from BACnet scan)
 
 **type**: name of point type in the ontology
 
-**point_type_id**: point type name as it appears in :code:`client.get_all_point_types()`
+**point_type_id**: point type name as it appears when accessing :ref:`point types<point types>`
 
-**measurement_id**: measurement type id as it appears in :code:`client.get_all_measurements())`
+**measurement_id**: measurement type id as it appears when accessing :ref:`measurement types<measurement types>`
 
 **state_text**: mapping between each state and text description of state
 
@@ -203,7 +268,16 @@ Building-Specific Points
 Site-Level Data
 ---------------
 
-Accessed with :code:`client.get_all_buildings()`
+Accessed with 
+
+.. tabs::
+  .. code-tab:: py
+  
+    client.get_all_buildings()
+
+  .. code-tab:: r R
+
+    get_buildings()
 
 **id**: Unique ID generated for a new site (primary key for the Site Table)
 
