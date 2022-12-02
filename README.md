@@ -12,7 +12,7 @@ If you're trying to develop locally and want to test changes, use `sphinx-build`
 	$ sphinx-build . ._build
 ```
 
-This builds the latest version of the docs in a new directory called `._build`. Then just open whatever html file from the `._build` dir into your fav browser, e.g. `\$ open ._build/xxx.html`
+This builds the latest version of the docs in a new directory called `._build`. Then just open whatever html file from the `._build` dir into your fav browser, e.g. `$ open ._build/xxx.html`
 
 Read the docs here:
 
