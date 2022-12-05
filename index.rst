@@ -70,7 +70,7 @@ For example, we can retrieve the last week of temperature data from all Zone Tem
     selection <- select_points(query)
 
     start <- as_datetime("2022-03-29 00:00:00", tz = "UTC")
-    #end <- as_datetime("2022-07-29 00:00:00", tz = "UTC")
+    end <- as_datetime("2022-07-29 00:00:00", tz = "UTC")
 
     sensor_data <- get_timeseries(start_time = start, end_time = end, point_ids = selection$points) #Queries timeseries data for the selection list we got above
 
