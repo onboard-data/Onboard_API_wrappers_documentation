@@ -8,7 +8,10 @@ Data model column definitions for each of the below tables can be found in :ref:
 Equipment types
 ---------------
 
-First, we query equipment types.
+First, we query equipment types. 
+
+.. note::
+   While the R client expands nested lists (meaning there is a row for each subtype), the Python client has one row per equipment type, meaning the sub-equipment types are nested as dataframes within each row. In the Python client, you must manually list subtypes for an equipment type as shown in the Python code block.
 
 .. tabs::
    .. code-tab:: py
@@ -19,6 +22,13 @@ First, we query equipment types.
       >>> # this query returns a JSON object, 
       >>> # which we convert to data frame using pd.json_normalize()
       >>> equip_type = pd.json_normalize(client.get_equipment_types())
+      >>> # to expand sub type
+      >>> sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
+      id  equipment_type_id         tag_name          name_long name_abbr
+   0  12                 26       exhaustFan        Exhaust Fan       EFN
+   1  13                 26        reliefFan         Relief Fan      RlFN
+   2  14                 26        returnFan         Return Fan       RFN
+   3  15                 26        supplyFan         Supply Fan       SFN
 
 
    .. code-tab:: r R
@@ -36,15 +46,7 @@ First, we query equipment types.
         .. image:: images/r_equip_types_df.png
 
 
-While the R client expands nested lists (meaning there is a row for each subtype), the Python client has one row per equipment type, meaning the sub-equipment types are nested as dataframes within each row. In the Python client, you can list subtypes for an equipment type (e.g. 'fan') like so:
 
-   >>> sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
-      id  equipment_type_id         tag_name          name_long name_abbr
-   0  12                 26       exhaustFan        Exhaust Fan       EFN
-   1  13                 26        reliefFan         Relief Fan      RlFN
-   2  14                 26        returnFan         Return Fan       RFN
-   3  15                 26        supplyFan         Supply Fan       SFN
-   ...
 
 
 Note that not all equipment types have associated sub-types.
