@@ -22,6 +22,14 @@ First, we query equipment types.
       >>> # this query returns a JSON object, 
       >>> # which we convert to data frame using pd.json_normalize()
       >>> equip_type = pd.json_normalize(client.get_equipment_types())
+      >>> equip_type[["id", "tag_name", "name_long", "sub_types"]]
+         id           tag_name            name_long                                          sub_types
+      0  12                ahu    Air Handling Unit  [{'id': 1, 'equipment_type_id': 12, 'tag_name'...
+      1  19             boiler               Boiler  [{'id': 4, 'equipment_type_id': 19, 'tag_name'...
+      2  20  chilledWaterPlant  Chilled Water Plant                                                 []
+      3  21            chiller              Chiller  [{'id': 7, 'equipment_type_id': 21, 'tag_name'...
+      4  22          condenser            Condenser                                                 []
+
       >>> # to expand sub types: 
       >>> sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
          id  equipment_type_id         tag_name          name_long name_abbr
@@ -36,15 +44,14 @@ First, we query equipment types.
       library(OnboardClient)
       library(tidyverse)
       api.setup()
-      get_equip_types() 
-
-.. tabs::
-    .. group-tab:: Python
-        .. image:: images/py_equip_types_df.png
-
-    .. group-tab:: R
-        .. image:: images/r_equip_types_df.png
-
+      get_equip_types() %>% select(id, tag_name, name_long, id_subtype, name_long_subtype, name_abbr_subtype)
+        id tag_name         name_long id_subtype                name_long_subtype name_abbr_subtype
+      1 12      ahu Air Handling Unit          1 Energy Recovery Ventilation Unit               ERV
+      2 12      ahu Air Handling Unit          2                 Make Up Air Unit               MAU
+      3 12      ahu Air Handling Unit          3                    Roof Top Unit               RTU
+      4 12      ahu Air Handling Unit         48      Dual Duct Air Handling Unit             DDAHU
+      5 19   boiler            Boiler          4                 Hot Water Boiler               BLR
+      6 19   boiler            Boiler          5                     Steam Boiler               BLR
 
 Note that not all equipment types have associated sub-types.
 
