@@ -11,7 +11,7 @@ Equipment types
 First, we query equipment types. 
 
 .. note::
-   While the R client expands nested lists (meaning there is a row for each subtype), the Python client has one row per equipment type, meaning the sub-equipment types are nested as dataframes within each row. In the Python client, you must manually list subtypes for an equipment type as shown in the Python code block.
+   While the R client `get_equip_types()` expands nested lists (meaning there is a row for each subtype), the Python `client.get_equipment_types()` has one row per equipment type, meaning the sub-equipment types are nested as dataframes within each row. In the Python client, you must manually list subtypes for an equipment type as shown in the Python code block.
 
 .. tabs::
    .. code-tab:: py
@@ -22,21 +22,21 @@ First, we query equipment types.
       >>> # this query returns a JSON object, 
       >>> # which we convert to data frame using pd.json_normalize()
       >>> equip_type = pd.json_normalize(client.get_equipment_types())
-      >>> # to expand sub type
+      >>> # to expand sub types: 
       >>> sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
-      id  equipment_type_id         tag_name          name_long name_abbr
-   0  12                 26       exhaustFan        Exhaust Fan       EFN
-   1  13                 26        reliefFan         Relief Fan      RlFN
-   2  14                 26        returnFan         Return Fan       RFN
-   3  15                 26        supplyFan         Supply Fan       SFN
+         id  equipment_type_id         tag_name          name_long name_abbr
+      0  12                 26       exhaustFan        Exhaust Fan       EFN
+      1  13                 26        reliefFan         Relief Fan      RlFN
+      2  14                 26        returnFan         Return Fan       RFN
+      3  15                 26        supplyFan         Supply Fan       SFN
 
 
    .. code-tab:: r R
 
-      > library(OnboardClient)
-      > library(tidyverse)
-      > api.setup()
-      > get_equip_types() 
+      library(OnboardClient)
+      library(tidyverse)
+      api.setup()
+      get_equip_types() 
 
 .. tabs::
     .. group-tab:: Python
@@ -44,9 +44,6 @@ First, we query equipment types.
 
     .. group-tab:: R
         .. image:: images/r_equip_types_df.png
-
-
-
 
 
 Note that not all equipment types have associated sub-types.
@@ -70,8 +67,8 @@ Accessing point types is very similar:
 
    .. code-tab:: r R
 
-      > point_types <- get_point_types()
-      > point_types %>% select(id, point_type, tags) %>% distinct()
+      point_types <- get_point_types()
+      point_types %>% select(id, point_type, tags) %>% distinct()
       #   id    point_type                                   tags
       #1  124   Occupied Heating Setpoint                    "air", "sp", "temp", "zone", "heating", "occ"
       #2  118   Outside Air Carbon Dioxide                   "air", "co2", "sensor", "outside"
@@ -98,8 +95,8 @@ We can extract the metadata associated with each tag in our data model like so:
 
    .. code-tab:: r R
 
-      > api.get('tags') # official
-      > get_tags()      # dev
+      api.get('tags') # official
+      get_tags()      # dev
       #     id    name        definition                                                     def_source  def_url                                                           category
       #1    120   battery     A container that stores chemical energy that can be con...     brick       https://brickschema.org/ontology/1.1/classes/Battery/             <NA>
       #2    191   exhaustVAV  A device that regulates the volume of air being exhaust...     onboard     <NA>                                                              <NA>
@@ -128,10 +125,10 @@ Unit types
 
    .. code-tab:: r R
 
-      > # Get all unit types from the Data Model
-      > units <- api.get('unit') # official
-      > units <- get_all_units() # dev
-      > units %>% select(id, name_long, qudt)
+      # Get all unit types from the Data Model
+      units <- api.get('unit') # official
+      units <- get_all_units() # dev
+      units %>% select(id, name_long, qudt)
       #  id name_long                              qudt
       #1 55     Litre      http://qudt.org/vocab/unit/L
       #2 68 US Gallon http://qudt.org/vocab/unit/GAL_US
@@ -158,10 +155,10 @@ Measurement types
 
    .. code-tab:: r R
 
-      > # Get all measurement types from the Data Model
-      > measurements <- api.get('measurements')   # official
-      > measurements <- get_all_measurements()    # dev
-      > measurements %>% select(id, name, qudt_type)
+      # Get all measurement types from the Data Model
+      measurements <- api.get('measurements')   # official
+      measurements <- get_all_measurements()    # dev
+      measurements %>% select(id, name, qudt_type)
       #  id           name                                        qudt_type
       #1 31         Torque                                             <NA>
       #2 27          Floor http://qudt.org/vocab/quantitykind/Dimensionless
