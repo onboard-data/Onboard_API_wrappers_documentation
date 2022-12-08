@@ -28,9 +28,9 @@ or using github:
 
    .. code-tab:: r R
 
-      > # This is the development (unstable) version of our package
-      > install.packages('devtools') # Install devtools package first
-      > devtools::install_github(repo='onboard-data/client-R') # install from github
+      # This is the development (unstable) version of our package
+      install.packages('devtools') # Install devtools package first
+      devtools::install_github(repo='onboard-data/client-R') # install from github
 
 .. note::
    The github version of the R client is our active development environment. It may include cool new features, but is not guaranteed to be as stable as the official release! Proceed at your own risk.
@@ -59,9 +59,9 @@ You can test if your API key is working with the following code:
 
    .. code-tab:: r R
 
-      > library(OnboardClient)
-      > api.setup() # in dev version, this will automatically return the server status message
-      > api.status()
+      library(OnboardClient)
+      api.setup() # in dev version, this will automatically return the server status message
+      api.status()
       [1] "Success: (200) OK"
 
 You can also retrieve a list of your currently authorized scopes with :code:`client.whoami()['apiKeyScopes']` in Python or :code:`api.get('whoami')$apiKeyScopes` in R.

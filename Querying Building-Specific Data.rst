@@ -21,8 +21,8 @@ Using the API, we can retrieve the data from all the buildings that belong to ou
 
     .. code-tab:: r R
 
-        > # Get a list of all the buildings under your Organization
-        > get_buildings() %>% select_if(~ !any(is.na(.))) # select call drops columns with all NAs
+        # Get a list of all the buildings under your Organization
+        get_buildings() %>% select_if(~ !any(is.na(.))) # select call drops columns with all NAs
         #   id org_id            name         timezone status equip_count point_count
         #1  66      2  T`Challa House America/New_York   LIVE          18         171
         #2 427      6 Office Building America/New_York   LIVE         137        2422
@@ -50,7 +50,7 @@ In order to retrieve the equipment for a particular building (e.g. Laboratory, i
 
     .. code-tab:: r R
     
-        ## TODO: make symmetric wrapper
+        ## TODO: make wrapper in R
 
 Querying Specific Points
 ------------------------
@@ -65,7 +65,7 @@ In order to query specific points, first we need to instantiate the PointSelecto
 
     .. code-tab:: r R
 
-        > query <- PointSelector()
+        query <- PointSelector()
 
 
 There are multiple ways to select points using the PointSelector. The user can select all the points that are associated with one or more lists containing any of the following::
@@ -85,10 +85,10 @@ For example, here we make a query that returns all the points of the type 'Real 
 
     .. code-tab:: r R
 
-        > query <- PointSelector()
-        > query$point_types <- c('Real Power', 'Zone Temperature')
-        > query$buildings <- c('Laboratory')
-        > selection <- select_points(query)
+        query <- PointSelector()
+        query$point_types <- c('Real Power', 'Zone Temperature')
+        query$buildings <- c('Laboratory')
+        selection <- select_points(query)
 
 We can add to our query to e.g. further require that returned points must be associated with the 'fcu' equipment type:
 
@@ -110,12 +110,12 @@ We can add to our query to e.g. further require that returned points must be ass
 
     .. code-tab:: r R
 
-        > query <- PointSelector()
-        > query$point_types <- c('Real Power', 'Zone Temperature')
-        > query$equipment_types <- c('fcu')
-        > query$buildings <- c('Laboratory')
-        > selection <- select_points(query)
-        > selection
+        query <- PointSelector()
+        query$point_types <- c('Real Power', 'Zone Temperature')
+        query$equipment_types <- c('fcu')
+        query$buildings <- c('Laboratory')
+        selection <- select_points(query)
+        selection
         $orgs
         [1] 6
 
@@ -151,8 +151,8 @@ We can get more information about these points by calling the function :code:`ge
 
     .. code-tab:: r R
 
-        > # Get metadata for the sensors you would like to query
-        > sensor_metadata_df <- get_points_by_ids(selection$points) %>% 
+        # Get metadata for the sensors you would like to query
+        sensor_metadata_df <- get_points_by_ids(selection$points) %>% 
             select(id, building_id, first_updated, last_updated, type, value, units)
         #      id building_id first_updated last_updated             type value             units
         #1 289575         428  1.626901e+12 1.669934e+12 Zone Temperature  68.0 degreesFahrenheit
@@ -173,8 +173,8 @@ Data extracted using the API can be exported to a .csv or excel file like so:
 
     .. code-tab:: r R
 
-        > # Save metadata to .csv file
-        > write.csv(sensor_metadata_df, file = "./metadata_query.csv")
+        # Save metadata to .csv file
+        write.csv(sensor_metadata_df, file = "./metadata_query.csv")
 
 Querying Time-Series Data
 -------------------------
@@ -204,8 +204,8 @@ We select the range of dates we want to query, making sure to specify timezones:
 
     .. code-tab:: r R
     
-        > start <- as_datetime("2022-03-29 00:00:00", tz = "UTC")
-        > end <- as_datetime("2022-07-29 00:00:00", tz = "UTC")
+        start <- as_datetime("2022-03-29 00:00:00", tz = "UTC")
+        end <- as_datetime("2022-07-29 00:00:00", tz = "UTC")
 
 
 Now we are ready to query the time-series data for the points we previously selected in the specified time-period
@@ -224,8 +224,8 @@ Now we are ready to query the time-series data for the points we previously sele
 
     .. code-tab:: r R
 
-        > sensor_data <- get_timeseries(start_time = start, end_time = end, point_ids = selection$points) #Queries timeseries data for the selection list we 
-        > sensor_data
+        sensor_data <- get_timeseries(start_time = start, end_time = end, point_ids = selection$points) #Queries timeseries data for the selection list we 
+        sensor_data
         #   timestamp           `289575` `289701`
         #   <dttm>                 <int>    <int>
         #1  2022-03-29 00:00:24       62       NA
@@ -253,15 +253,15 @@ This returns a dataframe containing columns for the timestamp and for each reque
 
     .. code-tab:: r R
 
-        > library(tidyverse)
-        > # now, wrangle to tidy format:
-        > sensor_data_clean <- sensor_data %>% 
+        library(tidyverse)
+        # now, wrangle to tidy format:
+        sensor_data_clean <- sensor_data %>% 
               mutate(timestamp = floor_date(timestamp, unit = "seconds")) %>%
               pivot_longer(-timestamp, names_to = "sensor", values_to = "value") %>%
               drop_na(value) %>%
               arrange(timestamp)
-        > # and plot:  
-        > sensor_data_clean %>% 
+        # and plot:  
+        sensor_data_clean %>% 
               ggplot(aes(x = timestamp, y = value, color = sensor)) +
               geom_line()
 
