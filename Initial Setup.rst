@@ -15,8 +15,8 @@ You can install your client of choice through official means:
 
    .. code-tab:: r R
 
-      > # use CRAN for the R client (stable)
-      > install.packages('OnboardClient')
+      # use CRAN for the R client (stable)
+      install.packages('OnboardClient')
 
 or using github:
 
@@ -64,7 +64,17 @@ You can test if your API key is working with the following code:
       api.status()
       [1] "Success: (200) OK"
 
-You can also retrieve a list of your currently authorized scopes with :code:`client.whoami()['apiKeyScopes']` in Python or :code:`api.get('whoami')$apiKeyScopes` in R.
+You can also retrieve a list of your currently authorized scopes with:
+
+.. tabs::
+   .. code-tab:: py
+      
+      >>> client.whoami()['apiKeyScopes']
+
+   .. code-tab:: r R
+
+      api.get('whoami')$apiKeyScopes
+
 
 Note about data structure
 -------------------------
