@@ -64,8 +64,8 @@ For example, we can retrieve the last week of temperature data from all Zone Tem
 
     api.setup()                                             # will prompt for api key
     query <- PointSelector()                                # create point selector
-    query$point_types       <- c('Zone Temperature')        # can list multiple points
-    query$equipment_types   <- c('fcu')                     # types, equipment types,
+    query$point_types       <- c('Zone Temperature')        # can list multiple point types
+    query$equipment_types   <- c('fcu')                     # equipment types,
     query$buildings         <- c('Laboratory')              # buildings, etc.
     selection <- select_points(query)
 
