@@ -44,8 +44,8 @@ For example, we can retrieve the last week of temperature data from all Zone Tem
     print(list(pd.DataFrame(client.get_all_buildings())['name'])) # returns list of buildings that you have access to (you may not have 'Laboratory' in your set)
 
     query = PointSelector()
-    query.point_types     = ['Zone Temperature'] # can list multiple point
-    query.equipment_types = ['fcu']              # types, equipment types,
+    query.point_types     = ['Zone Temperature'] # can list multiple point types,
+    query.equipment_types = ['fcu']              # equipment types,
     query.buildings       = ['Laboratory']       # buildings, etc.
     selection = client.select_points(query)
 
