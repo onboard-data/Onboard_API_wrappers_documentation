@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Onboard Python API documentation'
+project = 'Onboard Data API Bindings'
 copyright = '2022, Onboard Data Inc.'
 author = 'Ted Alexander'
 
