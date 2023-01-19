@@ -16,6 +16,6 @@ This builds the latest version of the docs in a new directory called `_build`. T
 
 Read the docs here:
 
-https://onboard-data-python-client-api.readthedocs.io/en/latest/
+https://onboard-api-wrappers-documentation.readthedocs.io/en/latest/
 
-Changes to this repo will not be reflected in docs until you build manually: see https://readthedocs.org/projects/onboard-data-python-client-api/
+Changes to this repo will not be reflected in docs until you build manually: see https://readthedocs.org/projects/onboard-api-wrappers-documentation/
