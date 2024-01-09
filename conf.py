@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Onboard Data API Bindings'
-copyright = '2022, Onboard Data Inc.'
+copyright = '2024, Onboard Data Inc.'
 author = 'Ted Alexander'
 
 # The full version, including alpha/beta/rc tags
