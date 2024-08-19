@@ -42,11 +42,12 @@ In order to retrieve the equipment for a particular building (e.g. Laboratory, i
         >>> # Get a list of all equipment in a building
         >>> all_equipment = pd.DataFrame(client.get_building_equipment(428))
         >>> all_equipment[['id', 'building_id', 'equip_id',  'points', 'tags']]
-                id  building_id        equip_id                                             points                     tags
-        0    27293          428      crac-T-105  [{'id': 291731, 'building_id': 428, 'last_upda...             [crac, hvac]
-        1    27294          428   exhaustFan-01  [{'id': 290783, 'building_id': 428, 'last_upda...  [fan, hvac, exhaustFan]
-        2    27295          428  exhaustFan-021  [{'id': 289684, 'building_id': 428, 'last_upda...  [fan, hvac, exhaustFan]
-        3    27296          428  exhaustFan-022  [{'id': 289655, 'building_id': 428, 'last_upda...  [fan, hvac, exhaustFan]
+                id  building_id        equip_id                                             points                  tags
+        0    43342          428    fumeHood-409  [{'building_id': 428, 'description': 'Lab 409A...           [fan, hvac]
+        1    43076          428  meter-CHW Flow  [{'building_id': 428, 'description': 'GPM FLOW...        [water, meter]
+        2    27314          428  coolingTower-2  [{'building_id': 428, 'description': None, 'de...  [coolingTower, hvac]
+        3    33888          428           ahu-1  [{'building_id': 428, 'description': 'Exhaust ...           [ahu, hvac]
+        4    33889          428           ahu-2  [{'building_id': 428, 'description': 'Chilled ...           [ahu, hvac]
 
     .. code-tab:: r R
     
@@ -70,49 +71,49 @@ In order to query specific points, first we need to instantiate the PointSelecto
 
 There are multiple ways to select points using the PointSelector. The user can select all the points that are associated with one or more lists containing any of the following::
 
-    'organizations', 'buildings', 'point_ids', 'point_names', 'point_hashes',
-    'point_ids', 'point_names', 'point_topics', 'equipment', 'equipment_types'
+    'orgs', 'buildings', 'point_ids', 'point_names', 'point_hashes',
+    'point_topics', 'updated_since', 'point_types', 'equipment', 'equipment_types'
 
-For example, here we make a query that returns all the points of the type 'Real Power' OR of the type 'Zone Temperature' that belong to the 'Laboratory' building:
+For example, here we make a query that returns all the points of the type 'Real Power' OR of the type 'zone_air_temperature_sensor' that belong to the 'Laboratory' building:
 
 .. tabs::
     .. code-tab:: py
         
         >>> query = PointSelector()
-        >>> query.point_types = ['Real Power', 'Zone Temperature']
+        >>> query.point_types = ['zone_air_temperature_sensor']
         >>> query.buildings = ['Laboratory']
         >>> selection = client.select_points(query)
 
     .. code-tab:: r R
 
         query <- PointSelector()
-        query$point_types <- c('Real Power', 'Zone Temperature')
+        query$point_types <- c('zone_air_temperature_sensor')
         query$buildings <- c('Laboratory')
         selection <- select_points(query)
 
-We can add to our query to e.g. further require that returned points must be associated with the 'fcu' equipment type:
+We can add to our query to e.g. further require that returned points must be associated with the 'HVAC/FCU' equipment type:
 
 .. tabs::
     .. code-tab:: py
 
         >>> query = PointSelector()
-        >>> query.point_types = ['Real Power', 'Zone Temperature']
-        >>> query.equipment_types = ['fcu']
+        >>> query.point_types = ['zone_air_temperature_sensor']
+        >>> query.equipment_types = ['HVAC/FCU']
         >>> query.buildings = ['Laboratory']
         >>> selection = select_points(query)
         >>> selection
-        {'buildings': [428],
+        {'orgs': [6],
+        'buildings': [428],
         'equipment': [27356, 27357],
-        'equipment_types': [9],
-        'orgs': [6],
-        'point_types': [77],
+        'equipment_types': [102],
+        'point_types': [2044],
         'points': [289701, 289575]}
 
     .. code-tab:: r R
 
         query <- PointSelector()
-        query$point_types <- c('Real Power', 'Zone Temperature')
-        query$equipment_types <- c('fcu')
+        query$point_types <- c('zone_air_temperature_sensor')
+        query$equipment_types <- c('HVAC/FCU')
         query$buildings <- c('Laboratory')
         selection <- select_points(query)
         selection
@@ -145,9 +146,9 @@ We can get more information about these points by calling the function :code:`ge
         >>> sensor_metadata = client.get_points_by_ids(selection['points'])
         >>> sensor_metadata_df = pd.DataFrame(sensor_metadata)
         >>> sensor_metadata_df[['id', 'building_id', 'first_updated', 'last_updated', 'type', 'value', 'units']]
-               id  building_id  first_updated  last_updated              type value              units
-        0  289575          428   1.626901e+12  1.641928e+12  Zone Temperature  66.0  degreesFahrenheit
-        1  289701          428   1.626901e+12  1.641928e+12  Zone Temperature  61.0  degreesFahrenheit
+               id  building_id  first_updated  last_updated                         type value              units
+        0  289575          428   1.626901e+12  1.724094e+12  zone_air_temperature_sensor  78.0  degreesFahrenheit
+        1  289701          428   1.626901e+12  1.724094e+12  zone_air_temperature_sensor  76.0  degreesFahrenheit
 
     .. code-tab:: r R
 
@@ -155,10 +156,10 @@ We can get more information about these points by calling the function :code:`ge
         sensor_metadata_df <- get_points_by_ids(selection$points) %>% 
             select(id, building_id, first_updated, last_updated, type, value, units)
         #      id building_id first_updated last_updated             type value             units
-        #1 289575         428  1.626901e+12 1.669934e+12 Zone Temperature  68.0 degreesFahrenheit
-        #2 289701         428  1.626901e+12 1.669934e+12 Zone Temperature  64.0 degreesFahrenheit
+        #1 289575         428  1.626901e+12 1.669934e+12 zone_air_temperature_sensor  68.0 degreesFahrenheit
+        #2 289701         428  1.626901e+12 1.669934e+12 zone_air_temperature_sensor  64.0 degreesFahrenheit
 
-:code:`sensor_metadata_df` now contains a dataframe with rows for each point. Based on the information about these points, we can observe that none of the points of our list belongs to the point type 'Real Power', but only to the point type 'Zone Temperature'
+:code:`sensor_metadata_df` now contains a dataframe with rows for each point. Based on the information about these points, we can observe that none of the points of our list belongs to the point type 'Real Power', but only to the point type 'zone_air_temperature_sensor'
 
 Exporting Data to .csv
 -----------------------
@@ -250,6 +251,7 @@ This returns a dataframe containing columns for the timestamp and for each reque
         >>> # Adding some formatting
         >>> fig.set_ylabel('Farenheit',fontdict={'fontsize':15})
         >>> fig.set_xlabel('time stamp',fontdict={'fontsize':15})
+        >>> plt.show()
 
     .. code-tab:: r R
 
