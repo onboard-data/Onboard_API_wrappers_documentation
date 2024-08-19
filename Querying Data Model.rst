@@ -10,9 +10,6 @@ Equipment types
 
 First, we query equipment types. 
 
-.. note::
-   While the R client `get_equip_types()` expands nested lists (meaning there is a row for each subtype), the Python `client.get_equipment_types()` has one row per equipment type, meaning the sub-equipment types are nested as dataframes within each row. In the Python client, you must manually list subtypes for an equipment type as shown in the Python code block.
-
 .. tabs::
    .. code-tab:: py
 
@@ -22,36 +19,23 @@ First, we query equipment types.
       >>> # this query returns a JSON object, 
       >>> # which we convert to data frame using pd.json_normalize()
       >>> equip_type = pd.json_normalize(client.get_equipment_types())
-      >>> equip_type[["id", "tag_name", "name_long", "sub_types"]]
-         id           tag_name            name_long                                          sub_types
-      0  12                ahu    Air Handling Unit  [{'id': 1, 'equipment_type_id': 12, 'tag_name'...
-      1  19             boiler               Boiler  [{'id': 4, 'equipment_type_id': 19, 'tag_name'...
-      2  20  chilledWaterPlant  Chilled Water Plant                                                 []
-      3  21            chiller              Chiller  [{'id': 7, 'equipment_type_id': 21, 'tag_name'...
-      4  22          condenser            Condenser                                                 []
-
-      >>> # to expand sub types: 
-      >>> sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
-         id  equipment_type_id         tag_name          name_long name_abbr
-      0  12                 26       exhaustFan        Exhaust Fan       EFN
-      1  13                 26        reliefFan         Relief Fan      RlFN
-      2  14                 26        returnFan         Return Fan       RFN
-      3  15                 26        supplyFan         Supply Fan       SFN
-
+      >>> equip_type[["id", "tag_name", "name_long"]]
+         id          tag_name         name_long
+      0  70    ELECTRICAL/ATS    ELECTRICAL/ATS
+      1  71   ELECTRICAL/BATT   ELECTRICAL/BATT
+      2  72     ELECTRICAL/CB     ELECTRICAL/CB
+      3  73    ELECTRICAL/GEN    ELECTRICAL/GEN
+      4  74  ELECTRICAL/PANEL  ELECTRICAL/PANEL
 
    .. code-tab:: r R
 
       library(OnboardClient)
       library(tidyverse)
       api.setup()
-      get_equip_types() %>% select(id, tag_name, name_long, id_subtype, name_long_subtype, name_abbr_subtype)
-        id tag_name         name_long id_subtype                name_long_subtype name_abbr_subtype
-      1 12      ahu Air Handling Unit          1 Energy Recovery Ventilation Unit               ERV
-      2 12      ahu Air Handling Unit          2                 Make Up Air Unit               MAU
-      3 12      ahu Air Handling Unit          3                    Roof Top Unit               RTU
-      4 12      ahu Air Handling Unit         48      Dual Duct Air Handling Unit             DDAHU
-      5 19   boiler            Boiler          4                 Hot Water Boiler               BLR
-      6 19   boiler            Boiler          5                     Steam Boiler               BLR
+      get_equip_types() %>% select(id, tag_name, name_long)
+        id  tag_name name_long
+      1 12  HVAC/AHU  HVAC/AHU
+      6 19  HVAC/BLR  HVAC/BLR
 
 Note that not all equipment types have associated sub-types.
 
@@ -65,12 +49,12 @@ Accessing point types is very similar:
 
       >>> # Get all point types from the Data Model
       >>> point_types = pd.DataFrame(client.get_all_point_types())
-      >>> point_types[['id', 'tag_name', 'tags']]
-            id                                  tag_name                                            tags
-      0    124                 Occupied Heating Setpoint             [air, sp, temp, zone, heating, occ]
-      1    118                Outside Air Carbon Dioxide                     [air, co2, sensor, outside]
-      2    130           Return Air Temperature Setpoint                         [air, sp, temp, return]
-      3     84  Dual-Temp Coil Discharge Air Temperature  [air, discharge, dualTemp, sensor, temp, coil]
+              id                      tag_name                     tags
+      0      868             ac_voltage_sensor           [sensor, volt]
+      1      869           air_pressure_sensor  [pressure, sensor, air]
+      2      870           air_pressure_status          [pressure, air]
+      3      871  ammonia_leak_detection_alarm    [alarm, leakDetector]
+      4      872   apparent_energy_accumulator       [energy, apparent]
 
    .. code-tab:: r R
 
@@ -94,11 +78,12 @@ We can extract the metadata associated with each tag in our data model like so:
    
       >>> # Get all tags and their definitions from the Data Model
       >>> pd.DataFrame(client.get_tags())
-            id        name                                         definition def_source                                            def_url
-      0    120     battery  A container that stores chemical energy that c...      brick  https://brickschema.org/ontology/1.1/classes/B...
-      1    191  exhaustVAV  A device that regulates the volume of air bein...    onboard                                               None
-      2    193         oil  A viscous liquid derived from petroleum, espec...      brick  https://brickschema.org/ontology/1.2/classes/Oil/
-      3    114    fumeHood  A fume-collection device mounted over a work s...      brick  https://brickschema.org/ontology/1.1/classes/F...
+            id                  name                                         definition def_source def_url category
+      0    499          cogeneration            Associated with a cogeneration process.        dbo    None     None
+      1    500      dehumidification             Process of removing moisture from air.        dbo    None     None
+      2    405       ELECTRICAL/TXMR  Tag for transformers, which are devices that t...        dbo    None     None
+      3    406        ELECTRICAL/UPS  Tag for all uninterruptible power supply (UPS)...        dbo    None     None
+      4    407  GATEWAYS/PASSTHROUGH  A device that provides translations for virtua...        dbo    None     None
 
    .. code-tab:: r R
 
@@ -123,12 +108,13 @@ Unit types
 
       >>> # Get all unit types from the Data Model
       >>> unit_types = pd.DataFrame(client.get_all_units())
-      >>> unit_types[['id', 'name_long', 'qudt']]
-         id             name_long                                  qudt
-      0  55                 Litre          http://qudt.org/vocab/unit/L
-      1  68             US Gallon     http://qudt.org/vocab/unit/GAL_US
-      2  75                   Bar        http://qudt.org/vocab/unit/BAR
-      3  76                 Watts          http://qudt.org/vocab/unit/W
+      >>> unit_types[['id', 'name_long', 'qudt']].sample(5)
+            id                  name_long                                        qudt
+      29    88  Kilo British Thermal Unit       http://qudt.org/vocab/unit/KiloBTU_IT
+      21   103              Square Meters               http://qudt.org/vocab/unit/M2
+      114    7      Cubic Feet Per Minute      http://qudt.org/vocab/unit/FT3-PER-MIN
+      15    98             Milligravities           http://qudt.org/vocab/unit/MilliG
+      33    78             Megawatt Hours         http://qudt.org/vocab/unit/MegaW-HR
 
    .. code-tab:: r R
 
@@ -154,11 +140,13 @@ Measurement types
       >>> # Get all measurement types from the Data Model
       >>> measurement_types = pd.DataFrame(client.get_all_measurements())
       >>> measurement_types[['id', 'name', 'qudt_type']]
-          id               name                                          qudt_type
-      0   20     Reactive Power   http://qudt.org/vocab/quantitykind/ReactivePower
-      1   27              Floor   http://qudt.org/vocab/quantitykind/Dimensionless
-      2   33       Power Factor   http://qudt.org/vocab/quantitykind/Dimensionless
-      3   31             Torque  http://qudt.org/vocab/quantitykind/Dimensionle...
+          id                name                                          qudt_type
+      0   26         Multi-State                                               None
+      1   33         powerfactor   http://qudt.org/vocab/quantitykind/Dimensionless
+      2   17  rotationalvelocity  http://qudt.org/vocab/quantitykind/AngularVelo...
+      3   28             current  http://qudt.org/vocab/quantitykind/ElectricCur...
+      4   14              energy          http://qudt.org/vocab/quantitykind/Energy
+
 
    .. code-tab:: r R
 

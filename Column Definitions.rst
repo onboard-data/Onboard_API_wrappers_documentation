@@ -21,41 +21,11 @@ Accessed with
 
 **tag_name**: this is the equip type tag associated with a class
 
-**name_long**: longer, human-readable name (e.g. tag "cogen" => "Cogeneration Plant"). This is the class name you will find in the ontology
-
-**name_abbr**: common abbreviated form (e.g. "FCU", "CHWS")
-
 **active**: True if this class in the latest version of the ontology
 
 **critical_point_types**: id numbers of the associated point types that are expected to be observed (look up in client.get_all_point_types())
 
-**sub_types**: embedded JSON of possible forms of the equipment super-type (e.g. 'fan' has the sub-types 'exhaustFan', 'reliefFan', 'returnFan', etc.)
-
 **tags**: Haystack tags associated with equipment super-type
-
-
-Sub-equipment types
--------------------
-Accessed for given equipment (e.g. 'fan') with 
-
-.. tabs::
-  .. code-tab:: py
-    
-    sub_type = pd.DataFrame(equip_type[equip_type.tag_name == 'fan']['sub_types'].item())
-
-  .. code-tab:: r R
-
-    get_equipment_types()
-
-**id**: unique integer associated with the given type/tag
-
-**equipment_type_id**: id of the associated equipment tag in client.get_equipment_types()
-
-**tag_name**: this is the sub-equip type tag associated with a class
-
-**name_long**: longer, human-readable name. This is the class name you will find in the ontology.
-
-**name_abbr**: common abbreviated form
 
 
 .. _point types:
@@ -102,9 +72,9 @@ Accessed with
 
 **id**: unique integer associated with the given type/tag
 
-**name_long**: human-readable unit name (e.g. 'Cubic Meter per Hour')
+**name_long**: human-readable unit name (e.g. 'Kilopascals')
 
-**name_abbr**: abbreviated form (e.g. 'm3/h')
+**name_abbr**: abbreviated form (e.g. 'kPa')
 
 **data_type**: form of associated data. Can be 'Binary', 'Continuous', 'Enum', 'None', or 'Ordinal'
 
@@ -142,7 +112,7 @@ Accessed with
 
 **units**: embedded JSON of possible units for given measurement type
 
-**qudt_type**: url for additional information about measurement type (e.g. 'Temperature') on qudt.org
+**qudt_type**: url for additional information about measurement type (e.g. 'rotationalvelocity') on qudt.org
 
 
 Tag metadata
@@ -167,12 +137,7 @@ Accessed with
 
 **definition**: definition of tag
 
-**def_source**: source of definition (either brick, haystack, or onboard)
-
-**def_url**: url for source of definition (brick and haystack only)
-
-**category**: category used to help sort point types in the ontology (see data model page). Can be 'Medium', 'Medium Property', 'Point Class', 'Quantity Modifier', or  None
-
+**def_source**: source of definition (will be dbo)
 
 .. _bsp-reference-label:
 

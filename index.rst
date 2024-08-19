@@ -44,9 +44,9 @@ For example, we can retrieve the last week of temperature data from all Zone Tem
     print(list(pd.DataFrame(client.get_all_buildings())['name'])) # returns list of buildings that you have access to (you may not have 'Laboratory' in your set)
 
     query = PointSelector()
-    query.point_types     = ['Zone Temperature'] # can list multiple point types,
-    query.equipment_types = ['fcu']              # equipment types,
-    query.buildings       = ['Laboratory']       # buildings, etc.
+    query.point_types     = ['zone_air_temperature_sensor'] # can list multiple point types,
+    query.equipment_types = ['HVAC/FCU']                    # equipment types,
+    query.buildings       = ['Laboratory']                  # buildings, etc.
     selection = client.select_points(query)
 
     start = pd.Timestamp("2022-03-29 00:00:00", tz="utc")
@@ -58,15 +58,15 @@ For example, we can retrieve the last week of temperature data from all Zone Tem
 
    .. code-tab:: r R
    
-    install.packages(c('OnboardClient', 'lubridate'))       # install whatever libraries you don't already have
+    install.packages(c('OnboardClient', 'lubridate'))           # install whatever libraries you don't already have
     library(OnboardClient)
-    library(lubridate)                                      # for datetime handling
+    library(lubridate)                                          # for datetime handling
 
-    api.setup()                                             # will prompt for api key
-    query <- PointSelector()                                # create point selector
-    query$point_types       <- c('Zone Temperature')        # can list multiple point types
-    query$equipment_types   <- c('fcu')                     # equipment types,
-    query$buildings         <- c('Laboratory')              # buildings, etc.
+    api.setup()                                                 # will prompt for api key
+    query <- PointSelector()                                    # create point selector
+    query$point_types       <- c('zone_air_temperature_sensor') # can list multiple point types
+    query$equipment_types   <- c('HVAC/FCU')                    # equipment types,
+    query$buildings         <- c('Laboratory')                  # buildings, etc.
     selection <- select_points(query)
 
     start <- as_datetime("2022-03-29 00:00:00", tz = "UTC")
