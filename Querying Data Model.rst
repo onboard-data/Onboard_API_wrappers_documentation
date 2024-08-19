@@ -60,11 +60,11 @@ Accessing point types is very similar:
 
       point_types <- get_point_types()
       point_types %>% select(id, point_type, tags) %>% distinct()
-      #   id    point_type                                   tags
-      #1  124   Occupied Heating Setpoint                    "air", "sp", "temp", "zone", "heating", "occ"
-      #2  118   Outside Air Carbon Dioxide                   "air", "co2", "sensor", "outside"
-      #3  130   Return Air Temperature Setpoint              "air", "sp", "temp", "return"
-      #4  84    Dual-Temp Coil Discharge Air Temperature     "air", "discharge", "dualTemp", "sensor", "temp", "coil"
+      #   id    point_type                                        tags
+      #1  868   ac_voltage_sensor                     "sensor", "volt"
+      #2  869   air_pressure_sensor        "pressure", "sensor", "air"
+      #3  870   air_pressure_status                  "pressure", "air"
+      #4  871   ammonia_leak_detection_alarm   "alarm", "leakDetector"
 
 :code:`point_types` is now a dataframe listing all the tags associated with each point type.
 
@@ -122,14 +122,11 @@ Unit types
       units <- api.get('unit') # official
       units <- get_all_units() # dev
       units %>% select(id, name_long, qudt)
-      #  id name_long                              qudt
-      #1 55     Litre      http://qudt.org/vocab/unit/L
-      #2 68 US Gallon http://qudt.org/vocab/unit/GAL_US
-      #3 75       Bar    http://qudt.org/vocab/unit/BAR
-      #4 76     Watts      http://qudt.org/vocab/unit/W
-
-
-
+      #  id                        name_long                                        qudt
+      #1 36         Thousand Pounds per Hour    http://qudt.org/vocab/unit/KiloLB-PER-HR
+      #2 71      Joules Per Kilogram Dry Air     http://qudt.org/vocab/unit/J-PER-KiloGM
+      #3 86          Kilojoules Per Kilogram http://qudt.org/vocab/unit/KiloJ-PER-KiloGM
+      #4 135 Megajoules Per Kilogram Dry Air http://qudt.org/vocab/unit/MegaJ-PER-KiloGM
 
 Measurement types
 -----------------
@@ -154,9 +151,8 @@ Measurement types
       measurements <- api.get('measurements')   # official
       measurements <- get_all_measurements()    # dev
       measurements %>% select(id, name, qudt_type)
-      #  id           name                                        qudt_type
-      #1 31         Torque                                             <NA>
-      #2 27          Floor http://qudt.org/vocab/quantitykind/Dimensionless
-      #3 33   Power Factor http://qudt.org/vocab/quantitykind/Dimensionless
-      #4 20 Reactive Power http://qudt.org/vocab/quantitykind/ReactivePower
-
+      #   id               name                                              qudt_type
+      #1  26        Multi-State                                                   <NA>
+      #2  33        powerfactor       http://qudt.org/vocab/quantitykind/Dimensionless
+      #3  17 rotationalvelocity     http://qudt.org/vocab/quantitykind/AngularVelocity
+      #4  28            current     http://qudt.org/vocab/quantitykind/ElectricCurrent
