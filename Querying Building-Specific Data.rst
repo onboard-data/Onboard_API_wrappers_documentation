@@ -209,7 +209,7 @@ We select the range of dates we want to query, making sure to specify timezones:
         end <- as_datetime("2022-07-29 00:00:00", tz = "UTC")
 
 
-Now we are ready to query the time-series data for the points we previously selected in the specified time-period
+Now we are ready to query the time-series data for the points we previously selected in the specified time-period:
 
 .. tabs::
     .. code-tab:: py
@@ -232,6 +232,21 @@ Now we are ready to query the time-series data for the points we previously sele
         #1  2022-03-29 00:00:24       62       NA
         #2  2022-03-29 00:01:25       62       NA
         #3  2022-03-29 00:02:26       62       NA
+
+
+Your time-series data will default to the units specified in https://portal.onboarddata.io/account?tab=unitPrefs, which can be set for your account or for all users in your organization. You can also specify your preferred units for each measurement type directly:
+
+.. tabs::
+    .. code-tab:: py
+
+        >>> # Get time-series data with chosen units
+        >>> timeseries_query = TimeseriesQuery(point_ids = selection['points'], start = start, end = end, units = {'pressure':'inH2O'})
+
+    .. code-tab:: r R
+
+        # Get time-series data with chosen units
+        units <- data.frame("temperature" = "k")
+        timeseries <- get_timeseries(start_time, end_time, point_ids, units)
 
 
 This returns a dataframe containing columns for the timestamp and for each requested point. And now we can plot these data:
