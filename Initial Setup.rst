@@ -43,7 +43,7 @@ You’ll need an active API Key with the appropriate scopes in order to use this
 
 If you are an existing Onboard user you can head over to your `account's api keys page <https://portal.onboarddata.io/account?tab=api>`_ and generate a new key and grant scopes for :code:`general` and :code:`buildings:read`.
 
-If you would like to get access to Onboard and start prototyping against an example building please `request access here <https://www.onboarddata.io/sandbox>`_.
+If you would like to get access to Onboard and start prototyping against an example building please `request access here <https://www.onboarddata.io/>`_.
 
 You can test if your API key is working with the following code:
 
